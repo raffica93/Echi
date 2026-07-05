@@ -29,6 +29,7 @@ test-results/
 .env*.local
 *.tsbuildinfo
 .next-dev*.log
+.vercel/
 
 # Walden scratch / local
 .walden/.cache/
