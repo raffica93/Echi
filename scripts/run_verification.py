@@ -199,7 +199,7 @@ def validate_observations(scratch: Path) -> list[str]:
     errors: list[str] = []
 
     remote = (scratch / "git-remote.log").read_text(encoding="utf-8")
-    if "https://github.com/raffica93/100Cose" not in remote:
+    if "https://github.com/raffica93/Echi" not in remote:
         errors.append("origin remote missing")
 
     git_log = (scratch / "git-log.log").read_text(encoding="utf-8")

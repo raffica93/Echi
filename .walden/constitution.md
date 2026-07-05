@@ -6,7 +6,7 @@ This file captures stable project-wide context that applies across all features.
 
 **100Cose** (anche "100 cose da fare") è un progetto personale in fase di **ideazione pre-MVP**: una lista di 100 attività da fare nella vita, con testo e categoria per ogni voce. L'obiettivo futuro è trasformare questi dati in un'applicazione che permetta di consultare, tracciare e completare le attività — ma in questa fase si definiscono solo requisiti e design tramite [Walden](https://github.com/raffica93/walden).
 
-- **Repository progetto:** https://github.com/raffica93/100Cose
+- **Repository progetto:** https://github.com/raffica93/Echi
 - **Repository Walden:** https://github.com/raffica93/walden
 - **Stato:** ideazione — nessuna feature spec approvata, nessuno stack applicativo scelto
 

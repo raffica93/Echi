@@ -49,7 +49,7 @@ Leggi `.walden/constitution.md` per il contesto del progetto e `.walden/lessons.
 
 ## Repository
 
-- **Questo progetto:** https://github.com/raffica93/100Cose
+- **Questo progetto:** https://github.com/raffica93/Echi
 - **Walden:** https://github.com/raffica93/walden
 
 > Il remote GitHub può rispondere 404 finché il repository non viene creato su GitHub. Il remote locale è già configurato; `git push -u origin main` funzionerà dopo la creazione del repo remoto.

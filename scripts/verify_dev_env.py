@@ -22,7 +22,7 @@ CONSTITUTION_MARKERS = [
     "100 cose",
     "100cose.json",
     "github.com/raffica93/walden",
-    "github.com/raffica93/100Cose",
+    "github.com/raffica93/Echi",
 ]
 
 
