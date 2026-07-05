@@ -97,6 +97,30 @@ def find_bootstrap_commit() -> tuple[str, str]:
     raise RuntimeError("no bootstrap commit contains required data and constitution files")
 
 
+def strip_section_labels(log_text: str) -> str:
+    lines: list[str] = []
+    for line in log_text.splitlines():
+        if line.startswith("# ") and not line.startswith("# cmd:"):
+            continue
+        lines.append(line)
+    return "\n".join(lines)
+
+
+def parse_cmd_blocks(log_text: str) -> list[tuple[str, str]]:
+    blocks: list[tuple[str, str]] = []
+    cleaned = strip_section_labels(log_text)
+    for chunk in cleaned.split("# cmd: "):
+        if not chunk.strip():
+            continue
+        cmd_line, _, body = chunk.partition("\n")
+        blocks.append((cmd_line.strip(), body.strip()))
+    return blocks
+
+
+def blocks_for_command(blocks: list[tuple[str, str]], command: str) -> list[str]:
+    return [body for cmd, body in blocks if cmd == command]
+
+
 def capture_git_remote(scratch: Path) -> None:
     run_and_capture(["git", "remote", "-v"], scratch / "git-remote.log")
 
@@ -180,15 +204,15 @@ def validate_observations(scratch: Path) -> list[str]:
 
     git_log = (scratch / "git-log.log").read_text(encoding="utf-8")
     for label in ("latest", "path-filtered", "bootstrap"):
-        if f"#{label}" not in git_log:
-            errors.append(f"git-log.log missing #{label} section")
+        if f"# {label}" not in git_log:
+            errors.append(f"git-log.log missing section label: {label}")
 
-    git_blocks = check_mod.parse_cmd_blocks(git_log)
-    if not check_mod.blocks_for_command(git_blocks, "git log --oneline -1"):
+    git_blocks = parse_cmd_blocks(git_log)
+    if not blocks_for_command(git_blocks, "git log --oneline -1"):
         errors.append("git-log.log missing latest commit output")
 
     path_cmd = format_cmd(PATH_FILTERED_LOG_CMD)
-    path_outputs = check_mod.blocks_for_command(git_blocks, path_cmd)
+    path_outputs = blocks_for_command(git_blocks, path_cmd)
     if not path_outputs:
         errors.append("git-log.log missing path-filtered log output")
     elif len([line for line in path_outputs[0].splitlines() if line.strip()]) != 1:
@@ -196,7 +220,7 @@ def validate_observations(scratch: Path) -> list[str]:
 
     bootstrap_hash, bootstrap_line = find_bootstrap_commit()
     show_cmd = f"git show -s --oneline {bootstrap_hash}"
-    show_blocks = check_mod.blocks_for_command(git_blocks, show_cmd)
+    show_blocks = blocks_for_command(git_blocks, show_cmd)
     if not show_blocks:
         errors.append("git-log.log missing bootstrap show output")
     elif bootstrap_hash not in show_blocks[0]:
@@ -204,7 +228,7 @@ def validate_observations(scratch: Path) -> list[str]:
 
     git_files = (scratch / "git-log-files.log").read_text(encoding="utf-8")
     show_files_cmd = f"git show --name-only --pretty=format: {bootstrap_hash}"
-    if not check_mod.blocks_for_command(check_mod.parse_cmd_blocks(git_files), show_files_cmd):
+    if not blocks_for_command(parse_cmd_blocks(git_files), show_files_cmd):
         errors.append("git-log-files.log missing expected cmd header")
 
     for required in BOOTSTRAP_PATHS:

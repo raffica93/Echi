@@ -64,7 +64,7 @@ class RunVerificationTests(unittest.TestCase):
             self.assertIn("# path-filtered", log_text)
             self.assertIn("# bootstrap", log_text)
 
-            blocks = self.check_mod.parse_cmd_blocks(log_text)
+            blocks = self.mod.parse_cmd_blocks(log_text)
             path_cmd = " ".join(self.mod.PATH_FILTERED_LOG_CMD)
             path_outputs = self.check_mod.blocks_for_command(blocks, path_cmd)
             self.assertEqual(len(path_outputs), 1)
