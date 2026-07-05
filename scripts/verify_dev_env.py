@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Verify 100Cose development environment setup."""
+"""Verify Echi development environment setup."""
 
 from __future__ import annotations
 
@@ -18,8 +18,7 @@ DATA_FILES = [
 ]
 
 CONSTITUTION_MARKERS = [
-    "100Cose",
-    "100 cose",
+    "Echi",
     "100cose.json",
     "github.com/raffica93/walden",
     "github.com/raffica93/Echi",

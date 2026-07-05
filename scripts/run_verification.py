@@ -153,7 +153,7 @@ def capture_constitution_check(scratch: Path) -> None:
             "grep",
             "-n",
             "-E",
-            "100Cose|100 cose|100cose.json|github.com/raffica93/walden",
+            "Echi|100cose.json|github.com/raffica93/walden|github.com/raffica93/Echi",
             "--",
             ".walden/constitution.md",
         ],
@@ -168,7 +168,7 @@ def capture_readme_check(scratch: Path) -> None:
             "grep",
             "-n",
             "-E",
-            r"Walden|walden feature init|github.com/raffica93/walden",
+            r"Echi|Walden|walden feature init|github.com/raffica93/walden|github.com/raffica93/Echi",
             "--",
             "README.md",
         ],
@@ -241,7 +241,7 @@ def validate_observations(scratch: Path) -> list[str]:
     constitution = (scratch / "constitution-check.log").read_text(encoding="utf-8")
     if "[What this project does" in constitution:
         errors.append("constitution still template")
-    for marker in ("100Cose", "100cose.json", "github.com/raffica93/walden"):
+    for marker in ("Echi", "100cose.json", "github.com/raffica93/walden", "github.com/raffica93/Echi"):
         if marker not in constitution:
             errors.append(f"constitution-check missing {marker}")
 
@@ -249,7 +249,7 @@ def validate_observations(scratch: Path) -> list[str]:
     errors.extend(walden_errors)
 
     readme = (scratch / "readme-check.log").read_text(encoding="utf-8")
-    for marker in ("Walden", "walden feature init", "github.com/raffica93/walden"):
+    for marker in ("Echi", "Walden", "walden feature init", "github.com/raffica93/walden", "github.com/raffica93/Echi"):
         if marker not in readme:
             errors.append(f"readme-check missing {marker}")
 
