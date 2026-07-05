@@ -28,9 +28,8 @@ Non ancora definito. Il workspace contiene solo dati sorgente (JSON, CSV, TXT) e
 # Verifica ambiente di sviluppo (conteggio voci, file dati, constitution)
 python scripts/verify_dev_env.py
 
-# Walden CLI
-walden version --json
-walden repo init --json
+# Walden CLI (repo init preserva constitution personalizzata)
+python scripts/check_walden_cli.py
 ```
 
 ## Key Files

@@ -23,16 +23,14 @@ Walden è già bootstrappato in questo repository (`.walden/`, workflow GitHub).
 ### Comandi iniziali
 
 ```bash
-# Verifica CLI
-walden version --json
-
-# Bootstrap repo — eseguire una sola volta; un secondo `walden repo init` dopo
-# aver personalizzato `.walden/constitution.md` lo risincronizza al template Walden
-walden repo init --json
-
-# Verifica ambiente locale
+# Verifica ambiente locale (dati + constitution)
 python scripts/verify_dev_env.py
+
+# Verifica Walden CLI (version + repo init idempotente senza perdere constitution)
+python scripts/check_walden_cli.py
 ```
+
+> **Non eseguire** `walden repo init` direttamente dopo aver personalizzato `.walden/constitution.md`: il CLI risincronizza i file gestiti al template Walden. Usa `scripts/check_walden_cli.py`, che ripristina la constitution popolata.
 
 ### Avviare la prima feature (ideazione)
 
@@ -63,6 +61,8 @@ Leggi `.walden/constitution.md` per il contesto del progetto e `.walden/lessons.
 
 ```bash
 python scripts/verify_dev_env.py
+python scripts/check_walden_cli.py
+python -m unittest discover -s tests -v
 ```
 
-Controlla presenza file dati, conteggio 100 voci in JSON e contenuto minimo della constitution.
+Controlla presenza file dati, conteggio 100 voci in JSON, constitution popolata e salute del CLI Walden.
