@@ -1,0 +1,126 @@
+{
+    "attività_lette_dal_poster": [
+      {
+        "1": "Fare un viaggio on the road",
+        "2": "Adottare un animale domestico",
+        "3": "Vedere l'aurora boreale",
+        "4": "Fare volontariato",
+        "5": "Coltivare il proprio cibo",
+        "6": "Scrivere una poesia",
+        "7": "Navigare in barca a vela",
+        "8": "Cucinare una torta",
+        "9": "Imparare a suonare uno strumento musicale",
+        "10": "Organizzare una festa a tema"
+      },
+      {
+        "11": "Partecipare alle Olimpiadi",
+        "12": "Nuotare nell'oceano",
+        "13": "Pilotare un aereo",
+        "14": "Innamorarsi",
+        "15": "Andare in safari",
+        "16": "Frequentare un corso di ceramica",
+        "17": "Imparare il surf",
+        "18": "Assistere al lancio di un razzo",
+        "19": "Visitare tutti i 7 continenti",
+        "20": "Piantare un albero"
+      },
+      {
+        "21": "Correre una maratona",
+        "22": "Visitare i nonni",
+        "23": "Fare una settimana senza tecnologia",
+        "24": "Partecipare a un ritiro di meditazione",
+        "25": "Donare in beneficenza",
+        "26": "Andare in campeggio",
+        "27": "Imparare ad apprezzare il vino",
+        "28": "Rimanere svegli fino all'alba",
+        "29": "Creare un vlog",
+        "30": "Mangiare in un ristorante stellato Michelin"
+      },
+      {
+        "31": "Assistere a un'eclissi solare",
+        "32": "Andare su una montagna russa",
+        "33": "Visitare un deserto",
+        "34": "Fare immersioni subacquee",
+        "35": "Camminare a piedi nudi sulla spiaggia",
+        "36": "Fare un nuovo amico",
+        "37": "Praticare yoga",
+        "38": "Costruire un pupazzo di neve",
+        "39": "Scalare una montagna",
+        "40": "Imparare una lingua straniera"
+      },
+      {
+        "41": "Andare all'opera",
+        "42": "Fare whale watching",
+        "43": "Riciclare vecchi vestiti",
+        "44": "Tracciare il proprio albero genealogico",
+        "45": "Sperimentare la gravità zero",
+        "46": "Iniziare a investire per il futuro",
+        "47": "Esplorare un parco nazionale",
+        "48": "Essere un mentore per qualcuno",
+        "49": "Imparare a ballare",
+        "50": "Vivere in un nuovo paese per un anno"
+      }
+    ],
+    "attività_plausibili_aggiunte": [
+      {
+        "51": "Imparare a fare il pane fatto in casa",
+        "52": "Partecipare a una manifestazione per una causa importante",
+        "53": "Creare un'opera d'arte",
+        "54": "Imparare a suonare uno strumento tradizionale",
+        "55": "Partecipare a una gara di cucina",
+        "56": "Fare volontariato in un paese in via di sviluppo",
+        "57": "Scrivere un libro",
+        "58": "Imparare a fare fotografie professionali",
+        "59": "Partecipare a una caccia al tesoro",
+        "60": "Visitare le sette meraviglie del mondo"
+      },
+      {
+        "61": "Imparare a fare meditazione",
+        "62": "Creare un giardino verticale",
+        "63": "Partecipare a un festival culturale internazionale",
+        "64": "Imparare a fare cocktail",
+        "65": "Fare un viaggio in solitaria",
+        "66": "Imparare a fare massaggi",
+        "67": "Creare un'invenzione",
+        "68": "Partecipare a una gara di cosplay",
+        "69": "Imparare a fare origami",
+        "70": "Visitare un vulcano attivo"
+      },
+      {
+        "71": "Fare un viaggio in mongolfiera",
+        "72": "Imparare a fare sculture di ghiaccio",
+        "73": "Partecipare a una sfilata di moda",
+        "74": "Imparare a fare acrobazie aeree",
+        "75": "Creare un proprio marchio di abbigliamento",
+        "76": "Imparare a fare graffiti",
+        "77": "Partecipare a una competizione di e-sports",
+        "78": "Imparare a fare la birra artigianale",
+        "79": "Creare un videogioco",
+        "80": "Visitare una tribù indigena"
+      },
+      {
+        "81": "Imparare a fare il sushi",
+        "82": "Partecipare a una maratona di ballo",
+        "83": "Creare un podcast",
+        "84": "Imparare a fare parkour",
+        "85": "Partecipare a un corso di sopravvivenza nella natura",
+        "86": "Imparare a fare l'apicoltore",
+        "87": "Creare una start-up",
+        "88": "Partecipare a una spedizione archeologica",
+        "89": "Imparare a fare il sommelier",
+        "90": "Visitare una città abbandonata"
+      },
+      {
+        "91": "Imparare a fare il ventriloquo",
+        "92": "Partecipare a un flash mob",
+        "93": "Creare un proprio profumo",
+        "94": "Imparare a fare il giocoliere",
+        "95": "Partecipare a una gara di mangiate",
+        "96": "Imparare a fare sculture di sabbia",
+        "97": "Creare un documentario",
+        "98": "Partecipare a una competizione di bodypainting",
+        "99": "Imparare a fare il fachiro",
+        "100": "Visitare un sito patrimonio dell'UNESCO"
+      }
+    ]
+  }

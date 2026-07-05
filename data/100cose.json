@@ -1,0 +1,504 @@
+{
+    "Fare": [
+        {
+            "id": 1,
+            "testo": "Fare un viaggio in macchina",
+            "categoria": "Avventura"
+        },
+        {
+            "id": 2,
+            "testo": "Adottare un animale domestico",
+            "categoria": "Relazioni"
+        },
+        {
+            "id": 3,
+            "testo": "Vedere l'aurora boreale",
+            "categoria": "Avventura"
+        },
+        {
+            "id": 4,
+            "testo": "Fare volontariato",
+            "categoria": "Relazioni"
+        },
+        {
+            "id": 5,
+            "testo": "Coltivare il proprio cibo",
+            "categoria": "Natura"
+        },
+        {
+            "id": 6,
+            "testo": "Scrivere una poesia",
+            "categoria": "Creatività"
+        },
+        {
+            "id": 7,
+            "testo": "Andare in barca a vela",
+            "categoria": "Avventura"
+        },
+        {
+            "id": 8,
+            "testo": "Cucinare una torta",
+            "categoria": "Creatività"
+        },
+        {
+            "id": 9,
+            "testo": "Imparare a suonare uno strumento musicale",
+            "categoria": "Creatività"
+        },
+        {
+            "id": 10,
+            "testo": "Organizzare una festa a tema",
+            "categoria": "Creatività"
+        },
+        {
+            "id": 11,
+            "testo": "Nuotare nell'oceano",
+            "categoria": "Avventura"
+        },
+        {
+            "id": 12,
+            "testo": "Innamorarsi",
+            "categoria": "Relazioni"
+        },
+        {
+            "id": 13,
+            "testo": "Andare in safari",
+            "categoria": "Avventura"
+        },
+        {
+            "id": 14,
+            "testo": "Frequentare un corso di ceramica",
+            "categoria": "Creatività"
+        },
+        {
+            "id": 15,
+            "testo": "Fare surf",
+            "categoria": "Avventura"
+        },
+        {
+            "id": 16,
+            "testo": "Visitare tutti i continenti",
+            "categoria": "Avventura"
+        },
+        {
+            "id": 17,
+            "testo": "Piantare un albero",
+            "categoria": "Natura"
+        },
+        {
+            "id": 18,
+            "testo": "Correre una maratona (min 5 km)",
+            "categoria": "Corpo"
+        },
+        {
+            "id": 19,
+            "testo": "Dare un bacio ai nonni",
+            "categoria": "Relazioni"
+        },
+        {
+            "id": 20,
+            "testo": "Fare 24 ore senza tecnologia",
+            "categoria": "Spirito"
+        },
+        {
+            "id": 21,
+            "testo": "Fare meditazione (min 1 ora)",
+            "categoria": "Spirito"
+        },
+        {
+            "id": 22,
+            "testo": "Donare soldi in beneficenza",
+            "categoria": "Relazioni"
+        },
+        {
+            "id": 23,
+            "testo": "Andare in campeggio (min 1 notte)",
+            "categoria": "Avventura"
+        },
+        {
+            "id": 24,
+            "testo": "Bere del vino costoso (min 100 €)",
+            "categoria": "Conoscenza"
+        },
+        {
+            "id": 25,
+            "testo": "Rimanere svegli fino all'alba",
+            "categoria": "Corpo"
+        },
+        {
+            "id": 26,
+            "testo": "Creare un vlog",
+            "categoria": "Creatività"
+        },
+        {
+            "id": 27,
+            "testo": "Mangiare in un ristorante stellato Michelin",
+            "categoria": "Conoscenza"
+        },
+        {
+            "id": 28,
+            "testo": "Assistere a un'eclissi solare",
+            "categoria": "Conoscenza"
+        },
+        {
+            "id": 29,
+            "testo": "Andare sulle montagne russe",
+            "categoria": "Avventura"
+        },
+        {
+            "id": 30,
+            "testo": "Visitare un deserto",
+            "categoria": "Avventura"
+        },
+        {
+            "id": 31,
+            "testo": "Fare immersioni subacquee",
+            "categoria": "Avventura"
+        },
+        {
+            "id": 32,
+            "testo": "Trovare un nuovo amico",
+            "categoria": "Relazioni"
+        },
+        {
+            "id": 33,
+            "testo": "Fare un corso yoga (min 1 ora)",
+            "categoria": "Corpo"
+        },
+        {
+            "id": 34,
+            "testo": "Costruire un pupazzo di neve",
+            "categoria": "Creatività"
+        },
+        {
+            "id": 35,
+            "testo": "Scalare una montagna",
+            "categoria": "Avventura"
+        },
+        {
+            "id": 36,
+            "testo": "Imparare una lingua straniera",
+            "categoria": "Spirito"
+        },
+        {
+            "id": 37,
+            "testo": "Andare all'opera o a teatro",
+            "categoria": "Creatività"
+        },
+        {
+            "id": 38,
+            "testo": "Vedere un ghiacciaio",
+            "categoria": "Avventura"
+        },
+        {
+            "id": 39,
+            "testo": "Vedere delfini in mare aperto",
+            "categoria": "Avventura"
+        },
+        {
+            "id": 40,
+            "testo": "Regalare vecchi vestiti",
+            "categoria": "Relazioni"
+        },
+        {
+            "id": 41,
+            "testo": "Tracciare il proprio albero genealogico",
+            "categoria": "Conoscenza"
+        },
+        {
+            "id": 42,
+            "testo": "Lanciarsi con il paracadute o gabbia del vento",
+            "categoria": "Avventura"
+        },
+        {
+            "id": 43,
+            "testo": "Investire dei soldi per il futuro",
+            "categoria": "Spirito"
+        },
+        {
+            "id": 44,
+            "testo": "Esplorare per bene un parco nazionale",
+            "categoria": "Avventura"
+        },
+        {
+            "id": 45,
+            "testo": "Consolare un amico",
+            "categoria": "Relazioni"
+        },
+        {
+            "id": 46,
+            "testo": "Andare a un corso di ballo",
+            "categoria": "Creatività"
+        },
+        {
+            "id": 47,
+            "testo": "Fare il pane fatto in casa",
+            "categoria": "Creatività"
+        },
+        {
+            "id": 48,
+            "testo": "Partecipare a una manifestazione",
+            "categoria": "Relazioni"
+        },
+        {
+            "id": 49,
+            "testo": "Imparare a suonare la scala pentatonica alla chitarra",
+            "categoria": "Creatività"
+        },
+        {
+            "id": 50,
+            "testo": "Scrivere un libro",
+            "categoria": "Creatività"
+        },
+        {
+            "id": 51,
+            "testo": "Fare 100 fotografie in un giorno",
+            "categoria": "Creatività"
+        },
+        {
+            "id": 52,
+            "testo": "Giocare a un gioco da tavola",
+            "categoria": "Relazioni"
+        },
+        {
+            "id": 53,
+            "testo": "Partecipare a una caccia al tesoro",
+            "categoria": "Avventura"
+        },
+        {
+            "id": 54,
+            "testo": "Visitare una delle sette meraviglie del Mondo Antico",
+            "categoria": "Avventura"
+        },
+        {
+            "id": 55,
+            "testo": "Creare un giardino verticale",
+            "categoria": "Creatività"
+        },
+        {
+            "id": 56,
+            "testo": "Partecipare a un festival musicale per più di un giorno",
+            "categoria": "Creatività"
+        },
+        {
+            "id": 57,
+            "testo": "Imparare a fare almeno 7 cocktail",
+            "categoria": "Creatività"
+        },
+        {
+            "id": 58,
+            "testo": "Fare un viaggio in solitaria",
+            "categoria": "Avventura"
+        },
+        {
+            "id": 59,
+            "testo": "Imparare a fare massaggi",
+            "categoria": "Corpo"
+        },
+        {
+            "id": 60,
+            "testo": "Travestirsi da cosplay",
+            "categoria": "Creatività"
+        },
+        {
+            "id": 61,
+            "testo": "Imparare a fare almeno 3 origami",
+            "categoria": "Creatività"
+        },
+        {
+            "id": 62,
+            "testo": "Visitare un vulcano attivo",
+            "categoria": "Avventura"
+        },
+        {
+            "id": 63,
+            "testo": "Fare un viaggio in mongolfiera",
+            "categoria": "Avventura"
+        },
+        {
+            "id": 64,
+            "testo": "Andare a una sfilata di moda",
+            "categoria": "Creatività"
+        },
+        {
+            "id": 65,
+            "testo": "Fare un graffito o scritta in strada",
+            "categoria": "Creatività"
+        },
+        {
+            "id": 66,
+            "testo": "Giocare a un gioco online con amici",
+            "categoria": "Relazioni"
+        },
+        {
+            "id": 67,
+            "testo": "Imparare a fare il sushi a casa",
+            "categoria": "Creatività"
+        },
+        {
+            "id": 68,
+            "testo": "Visitare una città abbandonata",
+            "categoria": "Avventura"
+        },
+        {
+            "id": 69,
+            "testo": "Partecipare a un flash mob",
+            "categoria": "Creatività"
+        },
+        {
+            "id": 70,
+            "testo": "Creare un proprio profumo",
+            "categoria": "Creatività"
+        },
+        {
+            "id": 71,
+            "testo": "Crearsi un oggetto utile",
+            "categoria": "Creatività"
+        },
+        {
+            "id": 72,
+            "testo": "Partecipare a una gara di mangiate",
+            "categoria": "Corpo"
+        },
+        {
+            "id": 73,
+            "testo": "Dipingere un quadro",
+            "categoria": "Creatività"
+        },
+        {
+            "id": 74,
+            "testo": "Partecipare a una danza tradizionale locale",
+            "categoria": "Avventura"
+        },
+        {
+            "id": 75,
+            "testo": "Visitare un sito archeologico antico",
+            "categoria": "Conoscenza"
+        },
+        {
+            "id": 76,
+            "testo": "Curare una pianta per almeno un anno",
+            "categoria": "Crescita personale"
+        },
+        {
+            "id": 77,
+            "testo": "Andare a una mostra d'arte",
+            "categoria": "Creatività"
+        },
+        {
+            "id": 78,
+            "testo": "Insegnare una competenza a qualcuno",
+            "categoria": "Spirito"
+        },
+        {
+            "id": 79,
+            "testo": "Imparare a fare il mosaico",
+            "categoria": "Creatività"
+        },
+        {
+            "id": 80,
+            "testo": "Partecipare a una competizione di sand art",
+            "categoria": "Creatività"
+        },
+        {
+            "id": 81,
+            "testo": "Imparare a fare la calligrafia",
+            "categoria": "Creatività"
+        },
+        {
+            "id": 82,
+            "testo": "Visitare un monastero",
+            "categoria": "Spirito"
+        },
+        {
+            "id": 83,
+            "testo": "Fare un tour in elicottero",
+            "categoria": "Avventura"
+        },
+        {
+            "id": 84,
+            "testo": "Digiunare volontariamente per 24 ore",
+            "categoria": "Spirito"
+        },
+        {
+            "id": 85,
+            "testo": "Organizzare una cena a lume di candela",
+            "categoria": "Relazioni"
+        },
+        {
+            "id": 86,
+            "testo": "Andare allo stadio",
+            "categoria": "Relazioni"
+        },
+        {
+            "id": 87,
+            "testo": "Scrivere una lettera a se stessi del futuro",
+            "categoria": "Spirito"
+        },
+        {
+            "id": 88,
+            "testo": "Fare amicizia con qualcuno di un'altra cultura",
+            "categoria": "Relazioni"
+        },
+        {
+            "id": 89,
+            "testo": "Bere del the con biscotti in una sala da tè",
+            "categoria": "Relazioni"
+        },
+        {
+            "id": 90,
+            "testo": "Imparare ad andare a cavallo",
+            "categoria": "Avventura"
+        },
+        {
+            "id": 91,
+            "testo": "Creare e usare (per 1 mese) un account social falso",
+            "categoria": "Relazioni"
+        },
+        {
+            "id": 92,
+            "testo": "Andare a pesca",
+            "categoria": "Avventura"
+        },
+        {
+            "id": 93,
+            "testo": "Passare una notte in un grattacielo di lusso",
+            "categoria": "Avventura"
+        },
+        {
+            "id": 94,
+            "testo": "Fare una passeggiata notturna",
+            "categoria": "Avventura"
+        },
+        {
+            "id": 95,
+            "testo": "Fare il bagno a mare nudi",
+            "categoria": "Avventura"
+        },
+        {
+            "id": 96,
+            "testo": "Fare un puzzle (Min 1000 pz)",
+            "categoria": "Creatività"
+        },
+        {
+            "id": 97,
+            "testo": "Fare 21 giorni senza carne (dieta vegetariana)",
+            "categoria": "Spirito"
+        },
+        {
+            "id": 98,
+            "testo": "Fare un viaggio senza una destinazione pianificata",
+            "categoria": "Avventura"
+        },
+        {
+            "id": 99,
+            "testo": "Imparare a sciare/snowboard",
+            "categoria": "Corpo"
+        },
+        {
+            "id": 100,
+            "testo": "Visitare la tua città per un giorno da turista",
+            "categoria": "Avventura"
+        }
+    ]
+}

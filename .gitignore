@@ -1,0 +1,30 @@
+# OS junk
+Thumbs.db
+Desktop.ini
+.DS_Store
+
+# Editor / IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Python (future scripts)
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.env
+
+# Node (future frontend)
+node_modules/
+dist/
+build/
+
+# Walden scratch / local
+.walden/.cache/
+
+# Duplicate / backup copies (not canonical)
+100cose - Copia.txt
+*- Copia.*
