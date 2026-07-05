@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Run walden repo init twice without losing a populated constitution.md."""
+"""Run walden repo init twice without losing populated managed files."""
 
 from __future__ import annotations
 
@@ -96,17 +96,21 @@ def check_repo_init_idempotent(envelope: dict | None) -> list[str]:
     return []
 
 
-def main() -> int:
+def run_repo_init_twice() -> tuple[list[dict | None], list[str]]:
+    """Invoke walden repo init --json twice; restore managed files before returning."""
     backups = backup_managed_files()
+    envelopes: list[dict | None] = []
     errors: list[str] = []
     try:
         first, first_err, first_code = run_walden_json("repo", "init", "--json")
+        envelopes.append(first)
         if first_code != 0:
             errors.append(f"repo init run 1 failed (exit {first_code}): {first_err}")
         elif first is None or not first.get("ok"):
             errors.append("repo init run 1 returned ok:false")
 
         second, second_err, second_code = run_walden_json("repo", "init", "--json")
+        envelopes.append(second)
         if second_code != 0:
             errors.append(f"repo init run 2 failed (exit {second_code}): {second_err}")
         else:
@@ -114,13 +118,18 @@ def main() -> int:
     finally:
         errors.extend(restore_managed_files(backups))
 
+    return envelopes, errors
+
+
+def main() -> int:
+    _, errors = run_repo_init_twice()
     if errors:
         print("FAIL")
         for err in errors:
             print(f"  - {err}")
         return 1
 
-    print("OK: walden repo init is idempotent and constitution preserved")
+    print("OK: walden repo init is idempotent and managed files preserved")
     return 0
 
 

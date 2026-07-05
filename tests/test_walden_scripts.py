@@ -82,6 +82,16 @@ class CheckWaldenCliTests(unittest.TestCase):
     def test_main_returns_zero(self):
         self.assertEqual(self.mod.main(), 0)
 
+    def test_format_walden_launch_log_contains_json_sections(self):
+        check_mod = load_module("check_walden_cli", ROOT / "scripts" / "check_walden_cli.py")
+        content = check_mod.format_walden_launch_log(
+            {"ok": True, "command": "version"},
+            [{"ok": True, "command": "repo-init"}, {"ok": True, "command": "repo-init"}],
+        )
+        self.assertIn("=== walden version --json ===", content)
+        self.assertIn("=== walden repo init --json (run 1) ===", content)
+        self.assertIn("=== walden repo init --json (run 2) ===", content)
+
 
 class ValidateWaldenSpecTests(unittest.TestCase):
     @classmethod

@@ -60,9 +60,8 @@ Leggi `.walden/constitution.md` per il contesto del progetto e `.walden/lessons.
 ## Verifica rapida
 
 ```bash
-python scripts/verify_dev_env.py
-python scripts/check_walden_cli.py
+python scripts/run_verification.py
 python -m unittest discover -s tests -v
 ```
 
-Controlla presenza file dati, conteggio 100 voci in JSON, constitution popolata e salute del CLI Walden.
+`run_verification.py` esegue il piano di verifica del goal: remote Git, commit bootstrap con dati, constitution, envelope JSON Walden (`version` + `repo init` x2 via `check_walden_cli.py`), README e integrità dati. Non usa `walden repo init` diretto — preserva i file personalizzati.
