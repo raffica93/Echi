@@ -1,14 +1,14 @@
 ---
 status: approved
 approved_at: 2026-07-05T19:28:09Z
-last_modified: 2026-07-05T19:28:09Z
+last_modified: 2026-07-05T19:47:20Z
 source_design_approved_at: 2026-07-05T19:23:14Z
 ---
 
 # Implementation Plan
 
-- [ ] 1. Scaffold the P0 application foundation
-  - [ ] 1.1 Create the Next.js TypeScript app foundation with App Router, Tailwind, shadcn/ui, Vitest, Testing Library, Playwright, lint, typecheck, and test scripts.
+- [x] 1. Scaffold the P0 application foundation
+  - [x] 1.1 Create the Next.js TypeScript app foundation with App Router, Tailwind, shadcn/ui, Vitest, Testing Library, Playwright, lint, typecheck, and test scripts.
     - Requirements: `R1.AC1`, `R11.AC4`, `NFR4`
     - Design: Architecture; Eco Creation Flow; Testing Strategy
     - Verification:
@@ -17,7 +17,7 @@ source_design_approved_at: 2026-07-05T19:23:14Z
       - command: ["npm", "run", "lint"]
         covers: ["R11.AC4"]
 
-  - [ ] 1.2 Add server-only configuration parsing for Supabase, Resend, Vercel Cron secret, `GEMINI_API_KEY`, `GEMINI_MODEL=gemini-3.5-flash`, and `AI_DRAFTING_ENABLED`.
+  - [x] 1.2 Add server-only configuration parsing for Supabase, Resend, Vercel Cron secret, `GEMINI_API_KEY`, `GEMINI_MODEL=gemini-3.5-flash`, and `AI_DRAFTING_ENABLED`.
     - Requirements: `R3.AC5`, `R8.AC1`, `R10.AC3`, `NFR2`
     - Design: Product And Technical Decisions; AI Draft Service; Delivery Job Runner; Security Considerations
     - Verification:
@@ -25,7 +25,7 @@ source_design_approved_at: 2026-07-05T19:23:14Z
         covers: ["R3.AC5", "R8.AC1", "R10.AC3"]
 
 - [ ] 2. Implement persistence, private storage, and lifecycle invariants
-  - [ ] 2.1 Add Supabase migrations for `users`, `echoes`, `echo_assets`, `delivery_channels`, `delivery_jobs`, `echo_access_tokens`, `delivery_events`, and `echo_receipts`.
+  - [x] 2.1 Add Supabase migrations for `users`, `echoes`, `echo_assets`, `delivery_channels`, `delivery_jobs`, `echo_access_tokens`, `delivery_events`, and `echo_receipts`.
     - Requirements: `R1.AC2`, `R2.AC1`, `R5.AC3`, `R6.AC5`, `R7.AC1`, `R8.AC10`, `R10.AC5`, `R10.AC6`, `NFR1`
     - Design: Data Models; Eco Application Service; Delivery Job Runner
     - Verification:

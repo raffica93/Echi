@@ -19,8 +19,16 @@ venv/
 
 # Node (future frontend)
 node_modules/
+.next/
+out/
 dist/
 build/
+coverage/
+playwright-report/
+test-results/
+.env*.local
+*.tsbuildinfo
+.next-dev*.log
 
 # Walden scratch / local
 .walden/.cache/

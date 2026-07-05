@@ -1,0 +1,49 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: 45 18% 94%;
+  --foreground: 225 12% 9%;
+  --card: 45 18% 94%;
+  --card-foreground: 225 12% 9%;
+  --popover: 45 18% 94%;
+  --popover-foreground: 225 12% 9%;
+  --primary: 24 49% 43%;
+  --primary-foreground: 42 31% 96%;
+  --secondary: 188 12% 22%;
+  --secondary-foreground: 42 31% 96%;
+  --muted: 192 11% 81%;
+  --muted-foreground: 220 8% 39%;
+  --accent: 38 37% 68%;
+  --accent-foreground: 225 12% 9%;
+  --destructive: 0 64% 44%;
+  --destructive-foreground: 42 31% 96%;
+  --border: 210 10% 74%;
+  --input: 210 10% 74%;
+  --ring: 24 49% 43%;
+  --radius: 0.5rem;
+}
+
+* {
+  @apply border-border;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  @apply bg-background text-foreground antialiased;
+}
+
+::selection {
+  background: hsl(var(--accent));
+  color: hsl(var(--accent-foreground));
+}
+
+.hero-vignette {
+  background:
+    linear-gradient(90deg, rgb(11 12 15 / 0.94) 0%, rgb(11 12 15 / 0.74) 41%, rgb(11 12 15 / 0.24) 100%),
+    linear-gradient(0deg, rgb(11 12 15 / 0.62), rgb(11 12 15 / 0.08));
+}
