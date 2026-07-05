@@ -47,21 +47,21 @@ def run_walden_json(*args: str) -> tuple[dict | None, str, int]:
         return None, stdout or proc.stderr.strip(), proc.returncode
 
 
-def backup_managed_files() -> dict[Path, str]:
-    backups: dict[Path, str] = {}
+def backup_managed_files() -> dict[Path, bytes]:
+    backups: dict[Path, bytes] = {}
     for path in MANAGED_FILES:
         if not path.is_file():
             continue
         content = path.read_text(encoding="utf-8")
         if should_preserve(path, content):
-            backups[path] = content
+            backups[path] = path.read_bytes()
     return backups
 
 
-def restore_managed_files(backups: dict[Path, str]) -> list[str]:
+def restore_managed_files(backups: dict[Path, bytes]) -> list[str]:
     errors: list[str] = []
     for path, content in backups.items():
-        path.write_text(content, encoding="utf-8", newline="\n")
+        path.write_bytes(content)
         restored = path.read_text(encoding="utf-8")
         if path == CONSTITUTION and not is_populated_constitution(restored):
             errors.append("failed to restore populated constitution.md")

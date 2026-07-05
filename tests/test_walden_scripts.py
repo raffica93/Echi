@@ -35,16 +35,16 @@ class WaldenRepoInitSafeTests(unittest.TestCase):
         cls._managed_backups = {
             ROOT / ".walden" / "constitution.md": (
                 ROOT / ".walden" / "constitution.md"
-            ).read_text(encoding="utf-8"),
+            ).read_bytes(),
             ROOT / ".github" / "pull_request_template.md": (
                 ROOT / ".github" / "pull_request_template.md"
-            ).read_text(encoding="utf-8"),
+            ).read_bytes(),
         }
 
     @classmethod
     def tearDownClass(cls):
         for path, content in cls._managed_backups.items():
-            path.write_text(content, encoding="utf-8", newline="\n")
+            path.write_bytes(content)
 
     def test_preserves_populated_constitution(self):
         constitution = ROOT / ".walden" / "constitution.md"
