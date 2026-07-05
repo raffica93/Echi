@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Verify walden CLI health without breaking project bootstrap files."""
+"""Walden CLI checks: validate envelopes and capture verbatim evidence."""
 
 from __future__ import annotations
 
@@ -7,9 +7,12 @@ import importlib.util
 import json
 import subprocess
 import sys
+from collections.abc import Callable
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
+
+CaptureFn = Callable[..., str]
 
 
 def load_safe_module():
@@ -21,57 +24,119 @@ def load_safe_module():
     return module
 
 
-def run_walden_version() -> tuple[dict | None, list[str]]:
-    proc = subprocess.run(
+def parse_cmd_blocks(log_text: str) -> list[tuple[str, str]]:
+    blocks: list[tuple[str, str]] = []
+    for chunk in log_text.split("# cmd: "):
+        if not chunk.strip():
+            continue
+        cmd_line, _, body = chunk.partition("\n")
+        blocks.append((cmd_line.strip(), body.strip()))
+    return blocks
+
+
+def blocks_for_command(blocks: list[tuple[str, str]], command: str) -> list[str]:
+    return [body for cmd, body in blocks if cmd == command]
+
+
+def validate_envelopes(version: dict | None, init_envelopes: list[dict | None]) -> list[str]:
+    errors: list[str] = []
+
+    if version is None or not version.get("ok"):
+        errors.append("walden version returned ok:false")
+
+    if len(init_envelopes) < 2:
+        errors.append("walden repo init: expected two envelopes")
+        return errors
+
+    if not init_envelopes[0] or not init_envelopes[0].get("ok"):
+        errors.append("walden repo init run 1 returned ok:false")
+    if not init_envelopes[1] or not init_envelopes[1].get("ok"):
+        errors.append("walden repo init run 2 returned ok:false")
+    else:
+        skipped = (init_envelopes[1].get("result") or {}).get("skipped_files") or []
+        if ".walden/constitution.md" not in skipped:
+            errors.append("repo init run 2 did not skip constitution")
+
+    return errors
+
+
+def envelopes_from_launch_log(log_path: Path) -> tuple[dict | None, list[dict | None], list[str]]:
+    if not log_path.is_file():
+        return None, [], ["walden-launch.log missing"]
+
+    blocks = parse_cmd_blocks(log_path.read_text(encoding="utf-8"))
+    version_outputs = blocks_for_command(blocks, "walden version --json")
+    init_outputs = blocks_for_command(blocks, "walden repo init --json")
+
+    errors: list[str] = []
+    version: dict | None = None
+    inits: list[dict | None] = []
+
+    try:
+        if not version_outputs:
+            errors.append("walden-launch.log missing version cmd")
+        else:
+            version = json.loads(version_outputs[0])
+
+        if len(init_outputs) < 2:
+            errors.append("walden-launch.log missing two repo init cmd blocks")
+        else:
+            inits = [json.loads(init_outputs[0]), json.loads(init_outputs[1])]
+    except json.JSONDecodeError:
+        errors.append("walden-launch.log JSON parse failed")
+        return None, [], errors
+
+    errors.extend(validate_envelopes(version, inits))
+    return version, inits, errors
+
+
+def capture_walden_launch(scratch: Path, capture_fn: CaptureFn) -> list[str]:
+    """Capture walden version + repo init x2 with managed-file restore."""
+    outfile = scratch / "walden-launch.log"
+    if outfile.exists():
+        outfile.unlink()
+
+    safe = load_safe_module()
+    backups = safe.backup_managed_files()
+    errors: list[str] = []
+
+    try:
+        capture_fn(["walden", "version", "--json"], outfile, append=True)
+        capture_fn(["walden", "repo", "init", "--json"], outfile, append=True)
+        capture_fn(["walden", "repo", "init", "--json"], outfile, append=True)
+    finally:
+        errors.extend(safe.restore_managed_files(backups))
+
+    _, _, check_errors = envelopes_from_launch_log(outfile)
+    errors.extend(check_errors)
+    return errors
+
+
+def check_walden_cli(scratch: Path | None = None, capture_fn: CaptureFn | None = None) -> list[str]:
+    if scratch is not None and capture_fn is not None:
+        return capture_walden_launch(scratch, capture_fn)
+
+    proc_version = subprocess.run(
         ["walden", "version", "--json"],
         capture_output=True,
         text=True,
         cwd=ROOT,
     )
-    if proc.returncode != 0:
-        return None, [f"walden version failed (exit {proc.returncode}): {proc.stderr.strip()}"]
+    if proc_version.returncode != 0:
+        return [f"walden version failed (exit {proc_version.returncode})"]
 
     try:
-        envelope = json.loads(proc.stdout)
+        version = json.loads(proc_version.stdout)
     except json.JSONDecodeError:
-        return None, ["walden version returned invalid JSON"]
+        return ["walden version returned invalid JSON"]
 
-    if not envelope.get("ok"):
-        return envelope, ["walden version returned ok:false"]
-
-    return envelope, []
-
-
-def run_safe_repo_init() -> tuple[list[dict | None], list[str]]:
-    module = load_safe_module()
-    return module.run_repo_init_twice()
-
-
-def check_walden_cli() -> tuple[dict | None, list[dict | None], list[str]]:
-    version_envelope, version_errors = run_walden_version()
-    init_envelopes, init_errors = run_safe_repo_init()
-    return version_envelope, init_envelopes, version_errors + init_errors
-
-
-def format_walden_launch_log(
-    version_envelope: dict | None,
-    init_envelopes: list[dict | None],
-) -> str:
-    sections: list[str] = []
-
-    sections.append("=== walden version --json ===")
-    sections.append(json.dumps(version_envelope, indent=2) if version_envelope else "null")
-
-    for index, envelope in enumerate(init_envelopes, start=1):
-        sections.append(f"=== walden repo init --json (run {index}) ===")
-        sections.append(json.dumps(envelope, indent=2) if envelope else "null")
-
-    return "\n".join(sections) + "\n"
+    safe = load_safe_module()
+    init_envelopes, init_errors = safe.run_repo_init_twice()
+    return validate_envelopes(version, init_envelopes) + init_errors
 
 
 def main() -> int:
-    version_envelope, init_envelopes, errors = check_walden_cli()
-
+    errors = check_walden_cli()
     if errors:
         print("FAIL")
         for err in errors:

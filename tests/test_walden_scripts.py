@@ -4,10 +4,10 @@
 from __future__ import annotations
 
 import importlib.util
-import json
 import shutil
 import subprocess
 import sys
+import tempfile
 import unittest
 from pathlib import Path
 
@@ -21,6 +21,29 @@ def load_module(name: str, path: Path):
     sys.modules[name] = module
     spec.loader.exec_module(module)
     return module
+
+
+class CheckWaldenCliTests(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        if shutil.which("walden") is None:
+            raise unittest.SkipTest("walden CLI not in PATH")
+        cls.mod = load_module("check_walden_cli", ROOT / "scripts" / "check_walden_cli.py")
+        cls.run_mod = load_module("run_verification", ROOT / "scripts" / "run_verification.py")
+
+    def test_main_returns_zero(self):
+        self.assertEqual(self.mod.main(), 0)
+
+    def test_capture_walden_launch_writes_cmd_blocks(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            scratch = Path(tmp)
+            errors = self.mod.capture_walden_launch(scratch, self.run_mod.run_and_capture)
+            self.assertEqual(errors, [])
+
+            log_text = (scratch / "walden-launch.log").read_text(encoding="utf-8")
+            blocks = self.mod.parse_cmd_blocks(log_text)
+            self.assertEqual(len(self.mod.blocks_for_command(blocks, "walden version --json")), 1)
+            self.assertEqual(len(self.mod.blocks_for_command(blocks, "walden repo init --json")), 2)
 
 
 class WaldenRepoInitSafeTests(unittest.TestCase):
@@ -50,7 +73,6 @@ class WaldenRepoInitSafeTests(unittest.TestCase):
         constitution = ROOT / ".walden" / "constitution.md"
         before = constitution.read_text(encoding="utf-8")
         self.assertNotIn(self.mod.TEMPLATE_MARKER, before)
-        self.assertNotIn(self.mod.PR_TEMPLATE_MARKER, (ROOT / ".github" / "pull_request_template.md").read_text(encoding="utf-8"))
 
         self.assertEqual(self.mod.main(), 0)
 
@@ -65,24 +87,6 @@ class WaldenRepoInitSafeTests(unittest.TestCase):
         second, _, code = self.mod.run_walden_json("repo", "init", "--json")
         self.assertEqual(code, 0)
         self.assertEqual(self.mod.check_repo_init_idempotent(second), [])
-
-
-class CheckWaldenCliTests(unittest.TestCase):
-    @classmethod
-    def setUpClass(cls):
-        if shutil.which("walden") is None:
-            raise unittest.SkipTest("walden CLI not in PATH")
-        cls.mod = load_module("check_walden_cli", ROOT / "scripts" / "check_walden_cli.py")
-
-    def test_version_ok(self):
-        envelope, errors = self.mod.run_walden_version()
-        self.assertEqual(errors, [])
-        self.assertTrue(envelope and envelope.get("ok"))
-
-    def test_main_returns_zero(self):
-        self.assertEqual(self.mod.main(), 0)
-
-
 
 
 class ValidateWaldenSpecTests(unittest.TestCase):

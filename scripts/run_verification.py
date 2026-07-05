@@ -5,7 +5,6 @@ from __future__ import annotations
 
 import argparse
 import importlib.util
-import json
 import subprocess
 import sys
 from pathlib import Path
@@ -20,16 +19,16 @@ PATH_FILTERED_LOG_CMD = [
     "git",
     "log",
     "--oneline",
+    "-1",
     "--",
     "data/100cose.json",
     ".walden/constitution.md",
-    "-1",
 ]
 
 
-def load_safe_module():
-    script = ROOT / "scripts" / "walden_repo_init_safe.py"
-    spec = importlib.util.spec_from_file_location("walden_repo_init_safe", script)
+def load_check_module():
+    script = ROOT / "scripts" / "check_walden_cli.py"
+    spec = importlib.util.spec_from_file_location("check_walden_cli", script)
     assert spec and spec.loader
     module = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(module)
@@ -73,31 +72,29 @@ def run_and_capture(
     return stdout.strip()
 
 
+def append_section_label(outfile: Path, label: str) -> None:
+    line = f"# {label}\n"
+    if outfile.exists() and outfile.stat().st_size > 0:
+        existing = outfile.read_text(encoding="utf-8")
+        if not existing.endswith("\n"):
+            existing += "\n"
+        outfile.write_text(existing + line, encoding="utf-8")
+    else:
+        outfile.write_text(line, encoding="utf-8")
+
+
 def run_git(*args: str) -> str:
     return run_and_capture(["git", *args])
 
 
 def find_bootstrap_commit() -> tuple[str, str]:
+    """First commit (oldest first) that contains all BOOTSTRAP_PATHS."""
     for line in run_git("log", "--oneline", "--reverse").splitlines():
         commit_hash = line.split()[0]
         files = run_git("show", "--name-only", "--pretty=format:", commit_hash)
         if all(required in files for required in BOOTSTRAP_PATHS):
             return commit_hash, line
     raise RuntimeError("no bootstrap commit contains required data and constitution files")
-
-
-def parse_cmd_blocks(log_text: str) -> list[tuple[str, str]]:
-    blocks: list[tuple[str, str]] = []
-    for chunk in log_text.split("# cmd: "):
-        if not chunk.strip():
-            continue
-        cmd_line, _, body = chunk.partition("\n")
-        blocks.append((cmd_line.strip(), body.strip()))
-    return blocks
-
-
-def blocks_for_command(blocks: list[tuple[str, str]], command: str) -> list[str]:
-    return [body for cmd, body in blocks if cmd == command]
 
 
 def capture_git_remote(scratch: Path) -> None:
@@ -109,10 +106,14 @@ def capture_git_log(scratch: Path) -> None:
     if outfile.exists():
         outfile.unlink()
 
+    append_section_label(outfile, "latest")
     run_and_capture(["git", "log", "--oneline", "-1"], outfile, append=True)
+
+    append_section_label(outfile, "path-filtered")
     run_and_capture(PATH_FILTERED_LOG_CMD, outfile, append=True)
 
     bootstrap_hash, _ = find_bootstrap_commit()
+    append_section_label(outfile, "bootstrap")
     run_and_capture(["git", "show", "-s", "--oneline", bootstrap_hash], outfile, append=True)
 
     run_and_capture(
@@ -152,21 +153,10 @@ def capture_readme_check(scratch: Path) -> None:
 
 
 def capture_walden_launch(scratch: Path) -> None:
-    safe = load_safe_module()
-    outfile = scratch / "walden-launch.log"
-    if outfile.exists():
-        outfile.unlink()
-
-    run_and_capture(["walden", "version", "--json"], outfile, append=True)
-
-    backups = safe.backup_managed_files()
-    try:
-        run_and_capture(["walden", "repo", "init", "--json"], outfile, append=True)
-        run_and_capture(["walden", "repo", "init", "--json"], outfile, append=True)
-    finally:
-        errors = safe.restore_managed_files(backups)
-        if errors:
-            raise RuntimeError("; ".join(errors))
+    check_mod = load_check_module()
+    errors = check_mod.capture_walden_launch(scratch, run_and_capture)
+    if errors:
+        raise RuntimeError("; ".join(errors))
 
 
 def capture_data_presence(scratch: Path) -> None:
@@ -181,6 +171,7 @@ def capture_git_status(scratch: Path) -> None:
 
 
 def validate_observations(scratch: Path) -> list[str]:
+    check_mod = load_check_module()
     errors: list[str] = []
 
     remote = (scratch / "git-remote.log").read_text(encoding="utf-8")
@@ -188,19 +179,24 @@ def validate_observations(scratch: Path) -> list[str]:
         errors.append("origin remote missing")
 
     git_log = (scratch / "git-log.log").read_text(encoding="utf-8")
-    git_blocks = parse_cmd_blocks(git_log)
+    for label in ("latest", "path-filtered", "bootstrap"):
+        if f"#{label}" not in git_log:
+            errors.append(f"git-log.log missing #{label} section")
 
-    latest_cmd = "git log --oneline -1"
-    if not blocks_for_command(git_blocks, latest_cmd):
+    git_blocks = check_mod.parse_cmd_blocks(git_log)
+    if not check_mod.blocks_for_command(git_blocks, "git log --oneline -1"):
         errors.append("git-log.log missing latest commit output")
 
     path_cmd = format_cmd(PATH_FILTERED_LOG_CMD)
-    if not blocks_for_command(git_blocks, path_cmd):
+    path_outputs = check_mod.blocks_for_command(git_blocks, path_cmd)
+    if not path_outputs:
         errors.append("git-log.log missing path-filtered log output")
+    elif len([line for line in path_outputs[0].splitlines() if line.strip()]) != 1:
+        errors.append("path-filtered log must return exactly one commit")
 
     bootstrap_hash, bootstrap_line = find_bootstrap_commit()
     show_cmd = f"git show -s --oneline {bootstrap_hash}"
-    show_blocks = blocks_for_command(git_blocks, show_cmd)
+    show_blocks = check_mod.blocks_for_command(git_blocks, show_cmd)
     if not show_blocks:
         errors.append("git-log.log missing bootstrap show output")
     elif bootstrap_hash not in show_blocks[0]:
@@ -208,7 +204,7 @@ def validate_observations(scratch: Path) -> list[str]:
 
     git_files = (scratch / "git-log-files.log").read_text(encoding="utf-8")
     show_files_cmd = f"git show --name-only --pretty=format: {bootstrap_hash}"
-    if not blocks_for_command(parse_cmd_blocks(git_files), show_files_cmd):
+    if not check_mod.blocks_for_command(check_mod.parse_cmd_blocks(git_files), show_files_cmd):
         errors.append("git-log-files.log missing expected cmd header")
 
     for required in BOOTSTRAP_PATHS:
@@ -225,34 +221,8 @@ def validate_observations(scratch: Path) -> list[str]:
         if marker not in constitution:
             errors.append(f"constitution-check missing {marker}")
 
-    walden_log = (scratch / "walden-launch.log").read_text(encoding="utf-8")
-    walden_blocks = parse_cmd_blocks(walden_log)
-
-    version_cmd = "walden version --json"
-    init_cmd = "walden repo init --json"
-    version_outputs = blocks_for_command(walden_blocks, version_cmd)
-    init_outputs = blocks_for_command(walden_blocks, init_cmd)
-    if not version_outputs:
-        errors.append("walden-launch.log missing version cmd")
-    if len(init_outputs) < 2:
-        errors.append("walden-launch.log missing two repo init cmd blocks")
-
-    try:
-        version = json.loads(version_outputs[0])
-        run1 = json.loads(init_outputs[0])
-        run2 = json.loads(init_outputs[1])
-    except (json.JSONDecodeError, IndexError):
-        errors.append("walden-launch.log JSON parse failed")
-        return errors
-
-    if not version.get("ok"):
-        errors.append("walden version ok:false")
-    if not run1.get("ok") or not run2.get("ok"):
-        errors.append("walden repo init ok:false")
-
-    skipped = (run2.get("result") or {}).get("skipped_files") or []
-    if ".walden/constitution.md" not in skipped:
-        errors.append("repo init run 2 did not skip constitution")
+    _, _, walden_errors = check_mod.envelopes_from_launch_log(scratch / "walden-launch.log")
+    errors.extend(walden_errors)
 
     readme = (scratch / "readme-check.log").read_text(encoding="utf-8")
     for marker in ("Walden", "walden feature init", "github.com/raffica93/walden"):

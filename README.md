@@ -61,4 +61,4 @@ python scripts/run_verification.py
 python -m unittest discover -s tests -v
 ```
 
-`run_verification.py` esegue il piano di verifica del goal: remote Git, commit bootstrap con dati, constitution, envelope JSON Walden (`version` + `repo init` x2 via `check_walden_cli.py`), README e integrità dati. Non usa `walden repo init` diretto — preserva i file personalizzati.
+`run_verification.py` esegue il piano di verifica del goal: remote Git, commit bootstrap con dati, constitution, README e integrità dati. Per Walden delega a `scripts/check_walden_cli.py` (envelope JSON `version` + `repo init` x2 con restore via `walden_repo_init_safe.py`). Non invocare `walden repo init` direttamente — riscrive i file gestiti al template.
