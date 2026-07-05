@@ -23,8 +23,11 @@ Walden è già bootstrappato in questo repository (`.walden/`, workflow GitHub).
 ### Comandi iniziali
 
 ```bash
-# Verifica CLI e bootstrap repo (idempotente)
+# Verifica CLI
 walden version --json
+
+# Bootstrap repo — eseguire una sola volta; un secondo `walden repo init` dopo
+# aver personalizzato `.walden/constitution.md` lo risincronizza al template Walden
 walden repo init --json
 
 # Verifica ambiente locale
