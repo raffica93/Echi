@@ -25,11 +25,8 @@ Non ancora definito. Il workspace contiene solo dati sorgente (JSON, CSV, TXT) e
 ## Sanity Checks
 
 ```bash
-# Verifica ambiente di sviluppo (conteggio voci, file dati, constitution)
-python scripts/verify_dev_env.py
-
-# Walden CLI (repo init preserva constitution personalizzata)
-python scripts/check_walden_cli.py
+python scripts/run_verification.py
+python -m unittest discover -s tests -v
 ```
 
 ## Key Files

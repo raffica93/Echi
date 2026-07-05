@@ -6,6 +6,7 @@ from __future__ import annotations
 import importlib.util
 import json
 import shutil
+import subprocess
 import sys
 import tempfile
 import unittest
@@ -26,36 +27,49 @@ def load_module():
     return module
 
 
+def expected_path_filtered_output() -> str:
+    proc = subprocess.run(
+        ["git", "log", "--oneline", "--", "data/100cose.json", ".walden/constitution.md", "-1"],
+        capture_output=True,
+        text=True,
+        cwd=ROOT,
+        check=True,
+    )
+    return proc.stdout.strip()
+
+
 class RunVerificationTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.mod = load_module()
 
-    def test_extract_matching_lines_constitution(self):
-        lines = self.mod.extract_matching_lines(
-            ROOT / ".walden" / "constitution.md",
-            self.mod.CONSTITUTION_PATTERNS,
-        )
-        joined = "\n".join(lines)
-        self.assertIn("100Cose", joined)
-        self.assertIn("100cose.json", joined)
-        self.assertNotIn("[What this project does", joined)
-
-    def test_extract_matching_lines_readme(self):
-        lines = self.mod.extract_matching_lines(
-            ROOT / "README.md",
-            self.mod.README_PATTERNS,
-        )
-        joined = "\n".join(lines)
-        self.assertIn("Walden", joined)
-        self.assertIn("walden feature init", joined)
-        self.assertIn("github.com/raffica93/walden", joined)
+    def test_run_and_capture_writes_cmd_header(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            outfile = Path(tmp) / "sample.log"
+            self.mod.run_and_capture(["git", "log", "--oneline", "-1"], outfile)
+            content = outfile.read_text(encoding="utf-8")
+            self.assertTrue(content.startswith("# cmd: git log --oneline -1\n"))
 
     def test_bootstrap_commit_includes_required_files(self):
         bootstrap_hash, _ = self.mod.find_bootstrap_commit()
         files = self.mod.run_git("show", "--name-only", "--pretty=format:", bootstrap_hash)
         for required in self.mod.BOOTSTRAP_PATHS:
             self.assertIn(required, files)
+
+    def test_git_log_literal_path_filtered_capture(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            scratch = Path(tmp)
+            self.mod.capture_git_log(scratch)
+
+            log_text = (scratch / "git-log.log").read_text(encoding="utf-8")
+            self.assertNotIn("latest:", log_text)
+            self.assertNotIn("bootstrap:", log_text)
+
+            blocks = self.mod.parse_cmd_blocks(log_text)
+            path_cmd = " ".join(self.mod.PATH_FILTERED_LOG_CMD)
+            path_outputs = self.mod.blocks_for_command(blocks, path_cmd)
+            self.assertEqual(len(path_outputs), 1)
+            self.assertEqual(path_outputs[0], expected_path_filtered_output())
 
     @unittest.skipIf(shutil.which("walden") is None, "walden CLI not in PATH")
     def test_full_verification_runner(self):
@@ -76,10 +90,8 @@ class RunVerificationTests(unittest.TestCase):
             self.assertEqual(errors, [])
 
             walden_log = (scratch / "walden-launch.log").read_text(encoding="utf-8")
-            self.assertIn('"ok": true', walden_log)
-
-            version_json = walden_log.split("=== walden version --json ===", 1)[1].split("===", 1)[0].strip()
-            version = json.loads(version_json)
+            blocks = self.mod.parse_cmd_blocks(walden_log)
+            version = json.loads(self.mod.blocks_for_command(blocks, "walden version --json")[0])
             self.assertTrue(version.get("ok"))
 
 
